@@ -1,4 +1,4 @@
-# date_parser.rb
+require 'time'
 require 'date'
 
 class DateParser
@@ -8,24 +8,29 @@ class DateParser
     "septembre" => 9, "octobre" => 10, "novembre" => 11, "décembre" => 12
   }
 
-  def self.parse(input)
-    match = input.match(/le (\d{1,2}) (\w+) à (\d{1,2}) h(?: (\d{1,2}))?/)
-    return nil unless match
+  def self.parse(date_str)
+    # Ex : "le 14 octobre à 15 h 30" ou "le 14 octobre à 15 h"
+    match = date_str.match(/le (\d{1,2}) (\w+) à (\d{1,2}) h(?: (\d{1,2}))?/)
+
+    unless match
+      puts "Format invalide. Essayez : le 14 octobre à 15 h 30"
+      return nil
+    end
 
     day = match[1].to_i
-    month_name = match[2].downcase
+    month = MONTHS[match[2].downcase]
     hour = match[3].to_i
     minute = match[4] ? match[4].to_i : 0
-
-    month = MONTHS[month_name]
-    return nil unless month
-
     year = Date.today.year
 
-    date = DateTime.new(year, month, day, hour, minute)
-    date < DateTime.now ? date.next_year : date
-  rescue
-    nil
+    # Si la date est passée, on suppose l’année prochaine
+    begin
+      parsed_time = Time.new(year, month, day, hour, minute)
+      parsed_time < Time.now ? Time.new(year + 1, month, day, hour, minute) : parsed_time
+    rescue ArgumentError
+      puts "Date invalide"
+      nil
+    end
   end
 end
 
