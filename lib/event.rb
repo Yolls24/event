@@ -4,6 +4,7 @@ require 'time'
 class Event
   attr_accessor :start_date, :duration, :title, :attendees
 
+
   def initialize(start_date, duration, title, attendees)
     @start_date = start_date.is_a?(String) ? Time.parse(start_date) : start_date
     @duration = duration
@@ -34,6 +35,16 @@ class Event
   def to_s
     "Titre : #{@title}\nDate de début : #{@start_date.strftime("%Y-%m-%d %H:%M")}\nDurée : #{@duration} minutes\nInvités : #{@attendees.join(', ')}"
   end
+
+  def inspect
+    {
+      title: @title,
+      start_date: @start_date,
+      duration: @duration,
+      attendees: @attendees.map(&:email)
+    }
+  end
+  
 end
 
 

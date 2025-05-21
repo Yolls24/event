@@ -5,6 +5,11 @@ require_relative 'event'
 require_relative 'eventcreator'
 require_relative 'calendar_displayer'
 require_relative 'date_parser'
+require 'pry'
+require 'bundler'
+Bundler.require
+
+binding.pry 
 
 # Exemple d'utilisation pour la classe User
 julie = User.new("julie@email.com", 32, "sarlat")
